@@ -1,807 +1,574 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BarrilTech AC - Presentación Estratégica</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerencia Estratégica – La Gran Cosecha | USB Cúcuta (Diseño Mejorado)</title>
+  <meta name="description" content="Presentación HTML del parcial de Gerencia Estratégica (Interdisciplinar 1) – Caso: La Gran Cosecha. Universidad Simón Bolívar, Sede Cúcuta." />
+  <meta name="theme-color" content="#1e5498" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* VARIABLES DE COLOR MEJORADAS (Basado en tonos de azul/verde más profesional) */
+    :root{
+      --bg:#f8f9fa;             /* Fondo más claro */
+      --paper:#ffffff;          /* Tarjeta (slide) blanca */
+      --ink:#1c2a38;            /* Texto base oscuro */
+      --muted:#6c757d;          /* Texto secundario gris */
+      --primary:#1e5498;        /* Acento principal (Azul USB/Profesional) */
+      --primary-light:#eaf3ff;  /* Tono claro del acento */
+      --primary-ink:#0f2b4c;    /* Contraste oscuro del acento */
+      --ring:rgba(30,84,152,.2);/* Sombra de acento */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink);
+      background:var(--bg); /* Fondo sólido y claro */
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow: hidden;
-            height: 100vh;
-        }
+    /* Deck layout */
+    .deck{min-height:100dvh; display:grid; place-items:center; padding:24px;}
+    .slide{
+      width:min(1280px,100%);
+      aspect-ratio:16/9;
+      background:var(--paper);
+      border-radius:28px; /* Bordes más suaves */
+      box-shadow:0 12px 30px rgba(0,0,0,.1), 0 4px 6px rgba(0,0,0,.05); /* Sombra sutil */
+      padding:60px; /* Más espacio interno */
+      position:relative;
+      overflow:hidden;
+      border-top: 8px solid var(--primary); /* Línea de acento superior */
+    }
+    .slide[hidden]{display:none}
 
-        .presentation-container {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
+    /* Header / footer */
+    .brand{display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.5px; color:var(--primary); text-transform:uppercase; font-size:.9rem}
+    .brand .dot{width:10px;height:10px;border-radius:50%; background:var(--primary); box-shadow:0 0 0 4px var(--ring)}
+    .foot{position:absolute; inset:auto 40px 30px; display:flex; justify-content:space-between; align-items:center; gap:16px; color:var(--muted); font-size:.95rem}
 
-        .slide {
-            background: white;
-            width: 90%;
-            max-width: 1200px;
-            height: 85vh;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            position: absolute;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            padding: 60px;
-            overflow-y: auto;
-        }
+    /* Typography */
+    h1{
+      font-family:'Playfair Display', serif; /* Fuente serif para títulos grandes */
+      font-size:clamp(36px,5.5vw,64px);
+      line-height:1.05;
+      margin:10px 0 16px;
+      color:var(--primary-ink);
+    }
+    h2{
+      font-size:clamp(26px,3.8vw,42px);
+      line-height:1.15;
+      margin:16px 0 10px;
+      color:var(--primary-ink);
+      border-bottom: 2px solid var(--primary-light);
+      padding-bottom: 4px;
+    }
+    h3{font-size:clamp(20px,2.6vw,28px); margin:10px 0; color:var(--primary)}
+    p{font-size:clamp(16px,1.65vw,20px); color:var(--ink); line-height:1.6;}
+    .muted{color:var(--muted)}
+    .kicker{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      color:var(--primary);
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.15em;
+      font-size:.9rem;
+      padding: 4px 0;
+    }
 
-        .slide.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
+    /* Layout helpers */
+    .grid{display:grid; gap:24px}
+    .cols-2{grid-template-columns:1fr 1fr}
+    .cols-3{grid-template-columns:repeat(3,1fr)}
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:var(--primary-light); /* Color de fondo claro */
+      border:1px solid rgba(30,84,152,.1); /* Borde sutil */
+      color:var(--primary-ink);
+      padding:8px 14px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:.9rem;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+    .callout{
+      border-left:5px solid var(--primary);
+      background:var(--primary-light);
+      padding:18px 20px;
+      border-radius:14px;
+      margin-top:16px;
+      font-weight:600;
+      color:var(--primary-ink);
+    }
+    .card{
+      border:1px solid var(--primary-light); /* Borde más formal */
+      border-radius:16px;
+      padding:20px;
+      background:var(--paper);
+      box-shadow: 0 4px 10px rgba(0,0,0,.03);
+    }
+    .card h3{margin-top:0; color:var(--primary-ink)}
+    ul{margin:10px 0 0 1.2rem; padding:0}
+    li{margin:.4rem 0; font-size:clamp(15px,1.55vw,19px); line-height:1.4;}
+    li::marker{color:var(--primary); font-weight:bold;}
 
-        .slide.prev {
-            transform: translateX(-100%);
-        }
+    /* Controls */
+    .controls{position:fixed; inset:auto 30px 30px; display:flex; gap:12px; z-index:9}
+    .btn{
+      appearance:none;
+      border:none;
+      background:var(--primary);
+      color:white;
+      border-radius:18px; /* Botones más redondeados */
+      padding:12px 18px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 4px 12px rgba(30,84,152,.3);
+      transition:background .2s, transform .1s;
+    }
+    .btn:hover{background: #194680;}
+    .btn:active{transform:translateY(1px); box-shadow:0 2px 8px rgba(30,84,152,.4);}
+    .btn svg{width:20px;height:20px;vertical-align:-4px; stroke:white;}
+    .btn.secondary{background:var(--muted); color:white; box-shadow:0 4px 12px rgba(108,117,125,.3);}
+    .btn.secondary:hover{background:#5c636a;}
+    .btn.secondary:active{box-shadow:0 2px 8px rgba(108,117,125,.4);}
 
-        .slide-1 {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
 
-        .slide-1 h1 {
-            font-size: 4em;
-            margin-bottom: 20px;
-            animation: fadeInDown 1s ease;
-        }
+    .progress{position:fixed; left:30px; right:30px; bottom:20px; height:8px; background:rgba(0,0,0,.08); border-radius:999px; overflow:hidden}
+    .bar{height:100%; width:0%; background:linear-gradient(90deg, var(--primary), #4a86e8); transition:width .35s ease}
 
-        .slide-1 h2 {
-            font-size: 2em;
-            margin-bottom: 30px;
-            animation: fadeInUp 1s ease 0.3s backwards;
-        }
+    /* Help overlay */
+    .help{position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; place-items:center; z-index:10}
+    .help .sheet{width:min(900px,92vw); background:var(--paper); border-radius:24px; padding:30px; box-shadow:0 30px 80px rgba(0,0,0,.45)}
+    .kbd{display:inline-grid; place-items:center; padding:4px 12px; border-radius:8px; border:1px solid #dcdfe3; background:#f0f2f5; min-width:40px; font-weight:700; color:var(--ink)}
 
-        .slide-1 .authors {
-            font-size: 1.2em;
-            margin-top: 40px;
-            animation: fadeIn 1s ease 0.6s backwards;
-        }
-
-        .slide-1 .logo {
-            width: 150px;
-            height: 150px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3em;
-            margin-bottom: 30px;
-            animation: bounce 2s infinite;
-        }
-
-        .slide-2 .content {
-            animation: fadeIn 0.8s ease;
-        }
-
-        .slide-2 h2 {
-            color: #667eea;
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            border-bottom: 4px solid #667eea;
-            padding-bottom: 10px;
-        }
-
-        .info-box {
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            padding: 30px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border-left: 5px solid #667eea;
-            animation: slideInLeft 0.8s ease;
-        }
-
-        .info-box h3 {
-            color: #764ba2;
-            margin-bottom: 15px;
-        }
-
-        .tech-stack {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .tech-item {
-            background: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            animation: popIn 0.5s ease backwards;
-        }
-
-        .tech-item:nth-child(1) { animation-delay: 0.2s; }
-        .tech-item:nth-child(2) { animation-delay: 0.4s; }
-        .tech-item:nth-child(3) { animation-delay: 0.6s; }
-        .tech-item:nth-child(4) { animation-delay: 0.8s; }
-
-        .porter-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .porter-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            padding: 25px;
-            border-radius: 15px;
-            color: white;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            animation: fadeInUp 0.6s ease backwards;
-        }
-
-        .porter-card:nth-child(1) { animation-delay: 0.1s; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .porter-card:nth-child(2) { animation-delay: 0.2s; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
-        .porter-card:nth-child(3) { animation-delay: 0.3s; background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
-        .porter-card:nth-child(4) { animation-delay: 0.4s; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; }
-        .porter-card:nth-child(5) { animation-delay: 0.5s; background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%); }
-
-        .porter-card:hover {
-            transform: translateY(-10px) scale(1.05);
-        }
-
-        .porter-card h3 {
-            font-size: 1.3em;
-            margin-bottom: 10px;
-        }
-
-        .nivel-badge {
-            display: inline-block;
-            padding: 5px 15px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 20px;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .dofa-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .dofa-card {
-            padding: 25px;
-            border-radius: 15px;
-            color: white;
-            animation: zoomIn 0.6s ease backwards;
-        }
-
-        .fortalezas { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); animation-delay: 0.1s; }
-        .debilidades { background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%); animation-delay: 0.2s; }
-        .oportunidades { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); animation-delay: 0.3s; }
-        .amenazas { background: linear-gradient(135deg, #434343 0%, #000000 100%); animation-delay: 0.4s; }
-
-        .dofa-card h3 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            border-bottom: 2px solid rgba(255,255,255,0.3);
-            padding-bottom: 10px;
-        }
-
-        .dofa-card ul {
-            list-style: none;
-            font-size: 0.9em;
-        }
-
-        .dofa-card li {
-            margin: 8px 0;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .dofa-card li:before {
-            content: "→";
-            position: absolute;
-            left: 0;
-        }
-
-        .estrategia-container {
-            margin-top: 30px;
-        }
-
-        .estrategia-card {
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            padding: 30px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border-left: 6px solid #667eea;
-            animation: slideInRight 0.8s ease backwards;
-        }
-
-        .estrategia-card:nth-child(2) { animation-delay: 0.2s; border-left-color: #764ba2; }
-        .estrategia-card:nth-child(3) { animation-delay: 0.4s; border-left-color: #f093fb; }
-
-        .estrategia-card h3 {
-            color: #667eea;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-        }
-
-        .estrategia-badge {
-            display: inline-block;
-            padding: 5px 15px;
-            background: #667eea;
-            color: white;
-            border-radius: 20px;
-            font-size: 0.9em;
-            margin: 5px 5px 15px 0;
-        }
-
-        .pyramid-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 30px;
-        }
-
-        .pyramid-level {
-            width: 100%;
-            padding: 20px;
-            margin: 10px 0;
-            border-radius: 10px;
-            color: white;
-            text-align: center;
-            animation: expandWidth 0.8s ease backwards;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .pyramid-level:hover {
-            transform: scale(1.05);
-        }
-
-        .pyramid-level:nth-child(1) { 
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); 
-            width: 90%;
-            animation-delay: 0.1s;
-        }
-        .pyramid-level:nth-child(2) { 
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
-            width: 75%;
-            animation-delay: 0.3s;
-        }
-        .pyramid-level:nth-child(3) { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-            width: 60%;
-            animation-delay: 0.5s;
-        }
-        .pyramid-level:nth-child(4) { 
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); 
-            width: 45%;
-            animation-delay: 0.7s;
-        }
-
-        .pyramid-level h3 {
-            font-size: 1.3em;
-            margin-bottom: 10px;
-        }
-
-        .navigation {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 20px;
-            z-index: 1000;
-        }
-
-        .nav-btn {
-            background: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            color: #667eea;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            background: #667eea;
-            color: white;
-        }
-
-        .nav-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .slide-counter {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: bold;
-            color: #667eea;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes popIn {
-            from {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes zoomIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes expandWidth {
-            from {
-                width: 0;
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-20px) translateX(10px); }
-        }
-
-        h2 {
-            color: #667eea;
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            border-bottom: 4px solid #667eea;
-            padding-bottom: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .slide {
-                padding: 30px;
-            }
-            
-            .porter-grid, .dofa-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .slide-1 h1 {
-                font-size: 2.5em;
-            }
-        }
-    </style>
+    /* Print to PDF */
+    @media print{
+      body{background:#fff}
+      .deck{display:block; padding:0}
+      .slide{break-after:page; border-radius:0; width:auto; aspect-ratio:auto; height:100vh; box-shadow:none; border-top:none; padding: 48px;}
+      .controls,.progress,.help{display:none !important}
+    }
+  </style>
 </head>
 <body>
-    <div class="presentation-container">
-        <div class="slide-counter">
-            <span id="currentSlide">1</span> / <span id="totalSlides">12</span>
-        </div>
+  <div class="deck" id="deck">
 
-        <!-- Slide 1: Portada -->
-        <div class="slide slide-1 active">
-            <div class="logo">🍽️</div>
-            <h1>BarrilTech AC</h1>
-            <h2>Sistema Web de Gestión de Ventas para Restaurantes</h2>
-            <div class="authors">
-                <p><strong>Presentado por:</strong></p>
-                <p>Joel Steven Pineda Rincón</p>
-                <p>Camila Andrea Grateron Moros</p>
-                <p>Gabriel Argenis Medina Carrero</p>
-            </div>
+    <section class="slide" data-title="Portada">
+      <div class="brand"><span class="dot"></span> INTERDISCIPLINAR 1 – GERENCIA ESTRATÉGICA</div>
+      <h1>La Gran Cosecha</h1>
+      <p class="muted" style="max-width:75ch">Caso real aplicado al sector panadero colombiano. Presentación del parcial n.º 2 – Universidad Simón Bolívar (USB) – Sede Cúcuta.</p>
+      <div class="grid cols-2" style="margin-top:30px">
+        <div class="card">
+          <h3>Equipo Presentador</h3>
+          <ul>
+            <li>Joel Steven Pineda Rincón</li>
+            <li>Gabriel Argenis Medina Carrero</li>
+            <li>Camila Andrea Graterón Moros</li>
+          </ul>
         </div>
+        <div class="card">
+          <h3>Curso y Docente</h3>
+          <ul>
+            <li>Ingeniería de Sistemas – 9.º semestre</li>
+            <li>Interdisciplinar 1 – Gerencia Estratégica</li>
+            <li>Profesora: Paula Marcela Patiño Contreras</li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot">
+        <span>USB Cúcuta · 30/10/2025</span>
+        <span class="pill">Presiona <span class="kbd">→</span> para avanzar</span>
+      </div>
+    </section>
 
-        <!-- Slide 2: Selección del Caso -->
-        <div class="slide slide-2">
-            <div class="content">
-                <h2>📋 Selección del Caso</h2>
-                <div class="info-box">
-                    <h3>¿Qué es BarrilTech AC?</h3>
-                    <p>Sistema Web de Gestión de Ventas orientado al sector de restaurantes en el Área Metropolitana de Cúcuta, Colombia.</p>
-                </div>
-                <div class="info-box">
-                    <h3>Objetivo Principal</h3>
-                    <p>Optimizar la gestión de pedidos, productos, clientes e inversiones en restaurantes pequeños y medianos mediante una plataforma accesible, intuitiva y de bajo costo.</p>
-                </div>
-                <div class="info-box">
-                    <h3>Stack Tecnológico</h3>
-                    <div class="tech-stack">
-                        <div class="tech-item">📊 Google Sheets</div>
-                        <div class="tech-item">⚙️ Apps Script</div>
-                        <div class="tech-item">🎨 HTML/CSS/JS</div>
-                        <div class="tech-item">🔒 Seguridad Integrada</div>
-                    </div>
-                </div>
-            </div>
+    <section class="slide" data-title="Presentación del caso">
+      <span class="kicker">Caso de Estudio</span>
+      <h2>Sobre La Gran Cosecha</h2>
+      <div class="grid cols-2" style="margin-top:15px">
+        <div>
+          <p>Panadería y pastelería fundada en 2015 (Venezuela) y expandida a Colombia desde 2022. Opera 21 sedes en ciudades como Cúcuta, Medellín, Villa del Rosario, Los Patios, Pamplona y Chinácota.</p>
+          <div class="callout">
+            Propuesta de valor: tortas personalizadas, ponqués esponjosos, panes frescos y pasteles decorados, enfocados en la diferenciación por diseño.
+          </div>
         </div>
+        <div class="card">
+          <h3>Impacto y Visión Estratégica</h3>
+          <ul>
+            <li>600 empleos directos generados.</li>
+            <li>Meta ambiciosa: 60 sedes en Colombia para 2025.</li>
+            <li>Apalancada en *diseños únicos* y una fuerte *promoción digital*.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot"><span>La empresa no es ficticia (caso verídico).</span><span class="pill">Sectores: panadería y pastelería</span></div>
+    </section>
 
-        <!-- Slide 3: Justificación -->
-        <div class="slide">
-            <h2>💡 Justificación del Proyecto</h2>
-            <div class="info-box" style="animation: fadeInUp 0.6s ease;">
-                <h3>🎯 Contexto Local</h3>
-                <p><strong>Crecimiento del sector gastronómico:</strong> Aumento considerable de nuevos restaurantes especializados entre 2023-2025</p>
-            </div>
-            <div class="info-box" style="animation: fadeInUp 0.8s ease;">
-                <h3>📊 Necesidad de Digitalización</h3>
-                <p><strong>Alta informalidad:</strong> 1 restaurante informal por cada restaurante formal en Cúcuta</p>
-            </div>
-            <div class="info-box" style="animation: fadeInUp 1s ease;">
-                <h3>🚀 Alineación con Iniciativas</h3>
-                <p><strong>"Mentes Influyentes 2025":</strong> Contribución a la transformación gastronómica en Norte de Santander</p>
-            </div>
-            <div class="info-box" style="animation: fadeInUp 1.2s ease;">
-                <h3>🎓 Aplicación Práctica</h3>
-                <p>Proyecto real desarrollado por estudiantes de Ingeniería de Sistemas aplicando conceptos estratégicos</p>
-            </div>
+    <section class="slide" data-title="Contexto del mercado">
+      <span class="kicker">Análisis de Entorno</span>
+      <h2>Sector panadero en Colombia</h2>
+      <div class="grid cols-2" style="margin-top:15px">
+        <div>
+          <ul>
+            <li>El sector supera los $4.705 millones anuales y emplea > 400.000 personas.</li>
+            <li>Consumo per cápita $\approx$ 22 kg/año por persona.</li>
+            <li>Caída del consumo de pan −6% (2022–2024) por precios y tendencias saludables.</li>
+            <li>Crecimiento en *postres/alternativas funcionales* $\approx$ 5,20% anual.</li>
+          </ul>
         </div>
+        <div class="card">
+          <h3>Implicaciones Estratégicas</h3>
+          <p>Mercado altamente competitivo con presión por precio, frescura y variedad; se premia fuertemente la *diferenciación* y la *innovación saludable*.</p>
+        </div>
+      </div>
+      <div class="foot"><span>Datos macroeconómicos del sector.</span><span class="pill">Oportunidad: líneas saludables & digitales</span></div>
+    </section>
 
-        <!-- Slide 4: 5 Fuerzas de Porter -->
-        <div class="slide">
-            <h2>⚔️ 5 Fuerzas de Porter</h2>
-            <div class="porter-grid">
-                <div class="porter-card">
-                    <h3>🥊 Rivalidad entre Competidores</h3>
-                    <p style="font-size: 0.9em;">Competencia intensa: Siigo, Vendty, iPos, Toast POS, Loggro, Fudo</p>
-                    <div class="nivel-badge">NIVEL: ALTO</div>
-                </div>
-                <div class="porter-card">
-                    <h3>🚪 Nuevos Entrantes</h3>
-                    <p style="font-size: 0.9em;">Barreras moderadas por herramientas de bajo costo y crecimiento digital del 150%</p>
-                    <div class="nivel-badge">NIVEL: MEDIO</div>
-                </div>
-                <div class="porter-card">
-                    <h3>👥 Poder de Clientes</h3>
-                    <p style="font-size: 0.9em;">Alta demanda de soluciones económicas y personalizadas en mercado informal</p>
-                    <div class="nivel-badge">NIVEL: ALTO</div>
-                </div>
-                <div class="porter-card">
-                    <h3>📦 Poder de Proveedores</h3>
-                    <p style="font-size: 0.9em;">Dependencia de Google (Sheets, Apps Script) pero con alternativas open-source</p>
-                    <div class="nivel-badge">NIVEL: BAJO</div>
-                </div>
-                <div class="porter-card">
-                    <h3>🔄 Productos Sustitutos</h3>
-                    <p style="font-size: 0.9em;">Hojas de cálculo manuales, apps de delivery, software genérico</p>
-                    <div class="nivel-badge">NIVEL: MEDIO</div>
-                </div>
-            </div>
+    <section class="slide" data-title="Porter: Rivalidad">
+      <span class="kicker">Las 5 Fuerzas de Porter</span>
+      <h2>Rivalidad entre competidores (Alta)</h2>
+      <div class="grid cols-2">
+        <div>
+          <ul>
+            <li>> 17.000 panaderías de barrio y cadenas establecidas (p. ej. Pan Pa' Ya).</li>
+            <li>Competencia intensa por precio, frescura y variedad.</li>
+            <li>Productos empacados/aliñados fuertes en regiones clave como Antioquia.</li>
+          </ul>
         </div>
+        <div class="callout">
+          <h3>Impacto en Estrategia</h3>
+          <p>Necesidad crítica de diferenciarse con diseños personalizados y acelerar la expansión geográfica para sostener la participación en el mercado.</p>
+        </div>
+      </div>
+      <div class="foot"><span>Alta rivalidad requiere propuesta de valor clara.</span><span class="pill">Fuerza 1: Diferenciación</span></div>
+    </section>
 
-        <!-- Slide 5: DOFA - Fortalezas y Debilidades -->
-        <div class="slide">
-            <h2>📊 Análisis DOFA (Parte 1)</h2>
-            <div class="dofa-grid">
-                <div class="dofa-card fortalezas">
-                    <h3>💪 FORTALEZAS</h3>
-                    <ul>
-                        <li>Herramientas accesibles y bajo costo</li>
-                        <li>Interfaz amigable e intuitiva (UI/UX)</li>
-                        <li>Integración completa de módulos</li>
-                        <li>Pruebas exhaustivas de seguridad</li>
-                        <li>Equipo multidisciplinario capacitado</li>
-                    </ul>
-                </div>
-                <div class="dofa-card debilidades">
-                    <h3>⚠️ DEBILIDADES</h3>
-                    <ul>
-                        <li>Equipo reducido (3 personas)</li>
-                        <li>Sin características móviles nativas</li>
-                        <li>Dependencia de herramientas gratuitas</li>
-                        <li>Enfoque local sin expansión explícita</li>
-                        <li>Escalabilidad limitada</li>
-                    </ul>
-                </div>
-            </div>
+    <section class="slide" data-title="Porter: Entrantes">
+      <span class="kicker">Las 5 Fuerzas de Porter</span>
+      <h2>Amenaza de nuevos entrantes (Media)</h2>
+      <div class="grid cols-2">
+        <div>
+          <ul>
+            <li>Barreras de entrada bajas a nivel local (equipos/locales moderados).</li>
+            <li>Saturación en grandes ciudades; impulso de canales digitales facilita el ingreso.</li>
+          </ul>
         </div>
+        <div class="callout">
+          <h3>Impacto en Estrategia</h3>
+          <p>La escala actual (>20 sedes) es una ventaja, pero se requiere inversión constante en marca (Branding) y marketing para elevar las barreras percibidas.</p>
+        </div>
+      </div>
+      <div class="foot"><span>Escala ≠ inmunidad: hay que sostener la marca.</span><span class="pill">Fuerza 2: Branding & Marketing</span></div>
+    </section>
 
-        <!-- Slide 6: DOFA - Oportunidades y Amenazas -->
-        <div class="slide">
-            <h2>📊 Análisis DOFA (Parte 2)</h2>
-            <div class="dofa-grid">
-                <div class="dofa-card oportunidades">
-                    <h3>🌟 OPORTUNIDADES</h3>
-                    <ul>
-                        <li>Crecimiento del sector gastronómico</li>
-                        <li>Aumento de reservas digitales (150%)</li>
-                        <li>Tendencias: IA y pagos digitales</li>
-                        <li>Iniciativa "Mentes Influyentes 2025"</li>
-                        <li>Financiamiento para sostenibilidad</li>
-                    </ul>
-                </div>
-                <div class="dofa-card amenazas">
-                    <h3>⚡ AMENAZAS</h3>
-                    <ul>
-                        <li>Competencia de software establecidos</li>
-                        <li>Cierres de negocios en Cúcuta 2025</li>
-                        <li>Alta informalidad del sector</li>
-                        <li>Evolución tecnológica rápida</li>
-                        <li>Desafíos regulatorios en HORECA</li>
-                    </ul>
-                </div>
-            </div>
+    <section class="slide" data-title="Porter: Proveedores">
+      <span class="kicker">Las 5 Fuerzas de Porter</span>
+      <h2>Poder de negociación de proveedores (Bajo–Medio)</h2>
+      <div class="grid cols-2">
+        <div>
+          <ul>
+            <li>Harina, azúcar, huevos: *commodities* con oferta local amplia.</li>
+            <li>Riesgos puntuales por trigo importado, aranceles e inflación (proyecciones 2025).</li>
+          </ul>
         </div>
+        <div class="callout">
+          <h3>Impacto en Estrategia</h3>
+          <p>Posibilidad de negociar mejores precios por volumen, pero conviene diversificar y localizar proveedores clave para mitigar riesgos de costos.</p>
+        </div>
+      </div>
+      <div class="foot"><span>Gestión de compras estratégica.</span><span class="pill">Fuerza 3: Abastecimiento</span></div>
+    </section>
 
-        <!-- Slide 7: Estrategia 1 FO -->
-        <div class="slide">
-            <h2>🎯 Estrategia 1: FO</h2>
-            <div class="estrategia-card">
-                <h3>🚀 Fortalezas + Oportunidades</h3>
-                <div class="estrategia-badge">Liderazgo en Costos</div>
-                <div class="estrategia-badge">Innovación</div>
-                <p style="margin: 20px 0; font-size: 1.1em;"><strong>Descripción:</strong></p>
-                <p>Usar el bajo costo y la interfaz amigable para pilotear el sistema en restaurantes locales, integrando tendencias como pedidos en línea y IA básica para reportes predictivos.</p>
-                <p style="margin: 20px 0; font-size: 1.1em;"><strong>Propósito:</strong></p>
-                <p>Aprovechar el crecimiento digital del 150% en reservas en línea para ganar cuota de mercado rápidamente en Cúcuta, optimizando eficiencia y atrayendo restaurantes emergentes con soluciones económicas que competidores establecidos no ofrecen a precios bajos.</p>
-            </div>
+    <section class="slide" data-title="Porter: Compradores">
+      <span class="kicker">Las 5 Fuerzas de Porter</span>
+      <h2>Poder de los compradores (Alto)</h2>
+      <div class="grid cols-2">
+        <div>
+          <ul>
+            <li>Alta sensibilidad a precios y marcada preferencia por opciones saludables.</li>
+            <li>Segmentos diferenciados: estratos altos buscan *premium*; estratos bajos priorizan economía.</li>
+          </ul>
         </div>
+        <div class="callout">
+          <h3>Impacto en Estrategia</h3>
+          <p>Es vital adaptar el portafolio: introducir líneas integrales, veganas, bajas en azúcar; mantener una oferta básica accesible para alta rotación.</p>
+        </div>
+      </div>
+      <div class="foot"><span>Diseño de portafolio centrado en el cliente.</span><span class="pill">Fuerza 4: Producto & Precio</span></div>
+    </section>
 
-        <!-- Slide 8: Estrategia 2 DO -->
-        <div class="slide">
-            <h2>🎯 Estrategia 2: DO</h2>
-            <div class="estrategia-card">
-                <h3>🔧 Debilidades + Oportunidades</h3>
-                <div class="estrategia-badge">Innovación</div>
-                <div class="estrategia-badge">Diferenciación</div>
-                <p style="margin: 20px 0; font-size: 1.1em;"><strong>Descripción:</strong></p>
-                <p>Expandir el equipo o formar alianzas con desarrolladores locales para agregar características móviles nativas y integraciones con IA, aprovechando iniciativas como "Mentes Influyentes 2025" y financiamiento para mercados sostenibles.</p>
-                <p style="margin: 20px 0; font-size: 1.1em;"><strong>Propósito:</strong></p>
-                <p>Superar la limitación de escalabilidad y el equipo reducido al capturar el auge de pagos digitales y experiencias saludables, permitiendo expansión regional y mejorando la competitividad en un sector en crecimiento.</p>
-            </div>
+    <section class="slide" data-title="Porter: Sustitutos">
+      <span class="kicker">Las 5 Fuerzas de Porter</span>
+      <h2>Amenaza de sustitutos (Alta)</h2>
+      <div class="grid cols-2">
+        <div>
+          <ul>
+            <li>Fuerte presencia de snacks saludables, productos *light/orgánicos* y dietas bajas en carbohidratos.</li>
+            <li>El mercado de postres funcionales crece $\approx$ 5,20% anual (amenaza y oportunidad).</li>
+          </ul>
         </div>
+        <div class="callout">
+          <h3>Impacto en Estrategia</h3>
+          <p>Gran reto a las ventas tradicionales, pero oportunidad clave para la innovación en líneas saludables y premium que compitan directamente con sustitutos.</p>
+        </div>
+      </div>
+      <div class="foot"><span>Innovar para competir con alternativas.</span><span class="pill">Fuerza 5: I+D de producto</span></div>
+    </section>
 
-        <!-- Slide 9: Estrategia 3 FA -->
-        <div class="slide">
-            <h2>🎯 Estrategia 3: FA</h2>
-            <div class="estrategia-card">
-                <h3>🛡️ Fortalezas + Amenazas</h3>
-                <div class="estrategia-badge">Diferenciación</div>
-                <div class="estrategia-badge">Soporte Local</div>
-                <p style="margin: 20px 0; font-size: 1.1em;"><strong>Descripción:</strong></p>
-                <p>Diferenciarse con reportes detallados, seguridad robusta y pruebas rigurosas frente a competidores, ofreciendo soporte personalizado para contrarrestar la informalidad y cierres de negocios en Cúcuta.</p>
-                <p style="margin: 20px 0; font-size: 1.1em;"><strong>Propósito:</strong></p>
-                <p>Mitigar la competencia de software como Siigo o Vendty y los desafíos regulatorios al enfatizar valor local y confiabilidad, fomentando lealtad en un mercado volátil y promoviendo la formalización de restaurantes informales.</p>
-            </div>
+    <section class="slide" data-title="DOFA: F y D">
+      <span class="kicker">Análisis Estratégico</span>
+      <h2>Matriz DOFA – Fortalezas y Debilidades</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Fortalezas (Interno)</h3>
+          <ul>
+            <li>Expansión rápida: >20 sedes y 600 empleos directos.</li>
+            <li>Diseños únicos y personalizados (tortas/ponqués) como diferenciador clave.</li>
+            <li>Presencia digital activa (TikTok, Instagram) con alta interacción.</li>
+            <li>Visión de crecimiento clara: meta de 60 sedes (2025).</li>
+          </ul>
         </div>
+        <div class="card">
+          <h3>Debilidades (Interno)</h3>
+          <ul>
+            <li>Dependencia de insumos básicos volátiles (harina, azúcar).</li>
+            <li>Menor énfasis inicial en productos saludables y sostenibles.</li>
+            <li>Escala aún menor que grandes cadenas, afectando la eficiencia logística.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot"><span>Base para estrategias FO/DO/FA.</span><span class="pill">Diagnóstico interno</span></div>
+    </section>
 
-        <!-- Slide 10: Pirámide de Valor -->
-        <div class="slide">
-            <h2 style="text-align: center;">🔺 Pirámide de Valor Agregado</h2>
-            <div class="pyramid-container">
-                <div class="pyramid-level">
-                    <h3>🌍 Nivel 4: Valor Social/Sostenible</h3>
-                    <p style="font-size: 0.9em;">Formalización del sector, digitalización comunitaria, iniciativa "Mentes Influyentes 2025"</p>
-                </div>
-                <div class="pyramid-level">
-                    <h3>💖 Nivel 3: Valor Emocional</h3>
-                    <p style="font-size: 0.9em;">Reducción de estrés, interfaces intuitivas, análisis estadísticos amigables</p>
-                </div>
-                <div class="pyramid-level">
-                    <h3>⚙️ Nivel 2: Valor Funcional</h3>
-                    <p style="font-size: 0.9em;">Automatización, reportes detallados, gestión eficiente con Apps Script</p>
-                </div>
-                <div class="pyramid-level">
-                    <h3>📦 Nivel 1: Valor Básico</h3>
-                    <p style="font-size: 0.9em;">Registro de pedidos, productos y clientes mediante plataforma web simple</p>
-                </div>
-            </div>
+    <section class="slide" data-title="DOFA: O y A">
+      <span class="kicker">Análisis Estratégico</span>
+      <h2>Matriz DOFA – Oportunidades y Amenazas</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Oportunidades (Externo)</h3>
+          <ul>
+            <li>Panes integrales, veganos y funcionales en crecimiento sostenido.</li>
+            <li>Panadería LATAM podría alcanzar $9,68 mil millones (2033).</li>
+            <li>Aumento en ventas en línea y demanda de experiencias personalizadas.</li>
+            <li>Demanda por productos orgánicos/ecoamigables (sostenibilidad).</li>
+          </ul>
         </div>
+        <div class="card">
+          <h3>Amenazas (Externo)</h3>
+          <ul>
+            <li>Caída del consumo de pan tradicional −6% (2022–2024).</li>
+            <li>Competencia intensa: 17.000 panaderías + cadenas establecidas.</li>
+            <li>Impuestos a ultra procesados y posible alza de aranceles en insumos.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot"><span>Contexto externo impulsa la innovación.</span><span class="pill">Diagnóstico externo</span></div>
+    </section>
 
-        <!-- Slide 11: Impacto y Conclusiones -->
-        <div class="slide">
-            <h2>🎯 Impacto Estratégico</h2>
-            <div class="info-box" style="animation: fadeInUp 0.6s ease;">
-                <h3>💼 Equilibrio Estratégico</h3>
-                <p>Las fortalezas internas (accesibilidad y diseño intuitivo) permiten entrada rápida al mercado local, mientras las debilidades requieren alianzas estratégicas para el crecimiento.</p>
-            </div>
-            <div class="info-box" style="animation: fadeInUp 0.8s ease;">
-                <h3>🌱 Potencial de Expansión</h3>
-                <p>El auge digital en el sector gastronómico ofrece oportunidades de crecimiento, alineando fortalezas con tendencias de mercado.</p>
-            </div>
-            <div class="info-box" style="animation: fadeInUp 1s ease;">
-                <h3>🎯 Diferenciación Clave</h3>
-                <p>Posicionamiento como solución asequible en un entorno económico incierto, fomentando sostenibilidad y formalización del sector.</p>
-            </div>
-            <div class="info-box" style="animation: fadeInUp 1.2s ease;">
-                <h3>🚀 Visión Futura</h3>
-                <p>Transformar la gestión gastronómica en Cúcuta mediante digitalización accesible, promoviendo la formalización y el crecimiento sostenible del ecosistema regional.</p>
-            </div>
+    <section class="slide" data-title="Estrategia FO">
+      <span class="kicker">Estrategia Ofensiva</span>
+      <h2>FO – Innovación saludable y personalizada</h2>
+      <div class="grid cols-2">
+        <div>
+          <p>Expandir agresivamente la línea de saludables (integrales, bajos en azúcar, con superalimentos locales) manteniendo la personalización como ventaja competitiva.</p>
+          <ul>
+            <li>Aprovecha el crecimiento $\approx$ 5,20% anual en alternativas funcionales (O1).</li>
+            <li>Objetivo: +20–30% ventas de línea saludable; posicionamiento *premium sostenible*.</li>
+          </ul>
         </div>
+        <div class="card">
+          <h3>Indicadores (KPIs)</h3>
+          <ul>
+            <li>% ventas de línea saludable vs. total.</li>
+            <li>Ticket promedio por segmento (premium vs. básico).</li>
+            <li>NPS y tasa de repetición de compra.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot"><span>Aprovechar las Fortalezas (F) para capitalizar Oportunidades (O).</span><span class="pill">Estrategia FO</span></div>
+    </section>
 
-        <!-- Slide 12: Cierre -->
-        <div class="slide" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-            <div style="animation: fadeInDown 0.8s ease;">
-                <div style="width: 120px; height: 120px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3em; margin: 0 auto 30px; animation: bounce 2s infinite;">🍽️</div>
-                <h1 style="font-size: 3.5em; margin-bottom: 20px; border: none; color: white;">¡Gracias!</h1>
-                <h2 style="font-size: 1.8em; margin-bottom: 30px; border: none; color: white;">BarrilTech AC</h2>
-                <p style="font-size: 1.2em; margin-bottom: 15px;">Transformando la gestión gastronómica en Cúcuta</p>
-                <div style="margin-top: 40px; font-size: 1.1em; animation: fadeInUp 1s ease 0.5s backwards;">
-                    <p>Joel Steven Pineda Rincón</p>
-                    <p>Camila Andrea Grateron Moros</p>
-                    <p>Gabriel Argenis Medina Carrero</p>
-                </div>
-                <p style="margin-top: 40px; font-size: 1em; opacity: 0.9; animation: fadeIn 1.5s ease 1s backwards;">📧 Contacto: barriltech@example.com</p>
-            </div>
+    <section class="slide" data-title="Estrategia DO">
+      <span class="kicker">Estrategia Adaptativa</span>
+      <h2>DO – Alianzas sostenibles y abastecimiento local</h2>
+      <div class="grid cols-2">
+        <div>
+          <p>Establecer alianzas con proveedores orgánicos y locales (p. ej. Nariño) para reducir la dependencia a *commodities* volátiles y crear una narrativa sostenible (O4).</p>
+          <ul>
+            <li>Mejora márgenes (C.V.); fortalece trazabilidad y el mensaje de sostenibilidad.</li>
+          </ul>
         </div>
+        <div class="card">
+          <h3>Indicadores (KPIs)</h3>
+          <ul>
+            <li>Mix de proveedores locales vs. importados.</li>
+            <li>Variación del costo de ventas (C.V.) trimestral.</li>
+            <li>Certificaciones / sellos verdes obtenidos.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot"><span>Minimizar Debilidades (D) aprovechando Oportunidades (O).</span><span class="pill">Estrategia DO</span></div>
+    </section>
 
-        <div class="navigation">
-            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
-            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+    <section class="slide" data-title="Estrategia FA">
+      <span class="kicker">Estrategia Defensiva/Reactiva</span>
+      <h2>FA – Diferenciación digital y fidelización</h2>
+      <div class="grid cols-2">
+        <div>
+          <p>Fortalecer el marketing digital (redes, pauta, contenido UGC) promocionando *tortas bajas en azúcar* y experiencias; apalancar audiencias digitales (F3) para mitigar la competencia intensa (A2).</p>
+          <ul>
+            <li>Mitiga la caída del consumo general (A1) y la competencia intensa (A2).</li>
+          </ul>
         </div>
+        <div class="card">
+          <h3>Indicadores (KPIs)</h3>
+          <ul>
+            <li>CPA/ROAS (Costo por Adquisición / Retorno) por campaña digital.</li>
+            <li>% clientes recurrentes y suscripción a novedades.</li>
+            <li>Tiempo de entrega y satisfacción posventa (CSAT).</li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot"><span>Usar Fortalezas (F) para mitigar Amenazas (A).</span><span class="pill">Estrategia FA</span></div>
+    </section>
+
+    <section class="slide" data-title="Pirámide de Valor">
+      <span class="kicker">El Core del Negocio</span>
+      <h2>Pirámide de Valor Agregado</h2>
+      <div class="grid cols-3" style="margin-top:20px">
+        <div class="card" style="border-top: 4px solid #f99d43;">
+          <h3>1. Valor Transformador (Impacto)</h3>
+          <p>Generación de 600 empleos y expansión con impacto social en comunidades locales.</p>
+        </div>
+        <div class="card" style="border-top: 4px solid #4a86e8;">
+          <h3>2. Valor Agregado (Diferenciación)</h3>
+          <p>Personalización: diseños únicos y productos *premium* ($\approx$ 20–30% sobre básicos) con mayor satisfacción del cliente.</p>
+        </div>
+        <div class="card" style="border-top: 4px solid #1e5498;">
+          <h3>3. Valor Básico (Operacional)</h3>
+          <p>Oferta esencial: panes y pasteles frescos con alta rotación que sostienen la operación diaria.</p>
+        </div>
+      </div>
+      <div class="foot"><span>Capas complementarias de valor.</span><span class="pill">Transformar · Agregar · Sostener</span></div>
+    </section>
+
+    <section class="slide" data-title="Conclusiones">
+      <span class="kicker">Cierre del Análisis</span>
+      <h2>Conclusiones y Próximos Pasos</h2>
+      <div class="grid cols-2">
+        <div>
+          <h3>Síntesis del Caso</h3>
+          <ul>
+            <li>La Gran Cosecha está bien posicionada, pero el mercado exige innovación saludable y eficiencia para mantener la ventaja.</li>
+            <li>Las estrategias FO/DO/FA abordan directamente los riesgos del mercado y maximizan las oportunidades de crecimiento.</li>
+            <li>El enfoque debe ser la calidad y la experiencia *personalizada*.</li>
+          </ul>
+        </div>
+        <div class="callout">
+          <h3>Recomendaciones Clave</h3>
+          <ul>
+            <li>Diversificar urgentemente hacia productos funcionales y saludables.</li>
+            <li>Fortalecer las cadenas de suministro locales y responsables.</li>
+            <li>Escalar el marketing digital y los programas de fidelización.</li>
+            <li>Implementar un monitoreo riguroso de todos los KPIs definidos.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot"><span>Meta 2025: 60 sedes – enfoque en calidad y personalización.</span><span class="pill">¡Gracias!</span></div>
+    </section>
+
+    <section class="slide" data-title="Créditos">
+      <span class="kicker">Documentación</span>
+      <h2>Fuentes y Créditos</h2>
+      <p>Contenido elaborado a partir del desarrollo del parcial y la presentación del caso <em>La Gran Cosecha</em> (USB Cúcuta, 2025).</p>
+      <ul>
+        <li>Documento base del parcial (análisis de entorno, DOFA, estrategias y pirámide de valor).</li>
+        <li>Presentación de apoyo del equipo (síntesis de hallazgos y conclusiones).</li>
+      </ul>
+      <p class="muted">(Atajos: <span class="kbd">←</span>/<span class="kbd">→</span> navegar · <span class="kbd">H</span> ayuda · <span class="kbd">P</span> imprimir PDF)</p>
+      <div class="foot"><span>Universidad Simón Bolívar – Sede Cúcuta</span><button class="btn secondary" id="helpBtn" title="Ayuda (H)">Atajos</button></div>
+    </section>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="prev" title="Anterior (←)">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="btn" id="next" title="Siguiente (→)">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+
+  <div class="help" id="help">
+    <div class="sheet">
+      <h3>Atajos de Navegación</h3>
+      <p>Usa <span class="kbd">→</span>/<span class="kbd">←</span> para navegar entre diapositivas. Presiona <span class="kbd">H</span> para abrir/cerrar esta ayuda. Presiona <span class="kbd">P</span> para imprimir o exportar a PDF.</p>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Teclado</h3>
+          <p><span class="kbd">→</span> siguiente · <span class="kbd">←</span> anterior</p>
+        </div>
+        <div class="card">
+          <h3>Móvil</h3>
+          <p>Desliza a la izquierda/derecha para cambiar de diapositiva.</p>
+        </div>
+        <div class="card">
+          <h3>Otros</h3>
+          <p><span class="kbd">P</span> exportar a PDF · <span class="kbd">H</span> ayuda</p>
+        </div>
+      </div>
+      <div style="margin-top:16px; display:flex; gap:10px; justify-content:flex-end"><button class="btn secondary" id="closeHelp">Cerrar</button></div>
     </div>
+  </div>
 
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        
-        document.getElementById('totalSlides').textContent = totalSlides;
+  <script>
+    (function(){
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      let index = Math.max(0, Math.min(slides.length-1, Number(location.hash.replace('#',''))-1 || 0));
+      const bar = document.getElementById('bar');
+      const help = document.getElementById('help');
 
-        function showSlide(n) {
-            if (n >= totalSlides) {
-                currentSlide = totalSlides - 1;
-            } else if (n < 0) {
-                currentSlide = 0;
-            } else {
-                currentSlide = n;
-            }
+      function show(i){
+        index = (i+slides.length)%slides.length;
+        slides.forEach((s,idx)=> s.hidden = idx!==index);
+        const pct = ((index+1)/slides.length)*100;
+        bar.style.width = pct + '%';
+        document.title = `${slides[index].dataset.title || 'Slide'} – (${index+1}/${slides.length})`;
+        location.hash = String(index+1);
+      }
 
-            slides.forEach((slide, index) => {
-                slide.classList.remove('active', 'prev');
-                if (index === currentSlide) {
-                    slide.classList.add('active');
-                } else if (index < currentSlide) {
-                    slide.classList.add('prev');
-                }
-            });
+      function next(){ show(index+1) }
+      function prev(){ show(index-1) }
+      show(index);
 
-            document.getElementById('currentSlide').textContent = currentSlide + 1;
-            
-            document.getElementById('prevBtn').disabled = currentSlide === 0;
-            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-        }
+      document.getElementById('next').addEventListener('click', next);
+      document.getElementById('prev').addEventListener('click', prev);
+      document.getElementById('helpBtn').addEventListener('click', ()=> help.style.display='grid');
+      document.getElementById('closeHelp').addEventListener('click', ()=> help.style.display='none');
 
-        function changeSlide(direction) {
-            showSlide(currentSlide + direction);
-        }
+      window.addEventListener('keydown', (e)=>{
+        if(e.key==='ArrowRight') next();
+        if(e.key==='ArrowLeft') prev();
+        if(e.key.toLowerCase()==='h') help.style.display = help.style.display==='grid' ? 'none' : 'grid';
+        if(e.key.toLowerCase()==='p') window.print();
+      });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') changeSlide(1);
-            if (e.key === 'ArrowLeft') changeSlide(-1);
-        });
-
-        showSlide(0);
-
-        document.querySelectorAll('.porter-card').forEach(card => {
-            card.addEventListener('click', function() {
-                this.style.transform = 'scale(1.1) rotate(2deg)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 300);
-            });
-        });
-
-        document.querySelectorAll('.pyramid-level').forEach(level => {
-            level.addEventListener('click', function() {
-                this.style.transform = 'scale(1.1)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 300);
-            });
-        });
-
-        function createParticles() {
-            const slide1 = document.querySelector('.slide-1');
-            if (!slide1) return;
-            
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.style.position = 'absolute';
-                particle.style.width = Math.random() * 10 + 'px';
-                particle.style.height = particle.style.width;
-                particle.style.background = 'rgba(255,255,255,0.3)';
-                particle.style.borderRadius = '50%';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animation = `float ${Math.random() * 3 + 2}s ease-in-out infinite`;
-                particle.style.pointerEvents = 'none';
-                slide1.appendChild(particle);
-            }
-        }
-
-        createParticles();
-    </script>
+      // Touch swipe
+      let startX=null;
+      window.addEventListener('touchstart', (e)=>{ startX = e.touches[0].clientX; });
+      window.addEventListener('touchend', (e)=>{
+        if(startX===null) return; const dx = e.changedTouches[0].clientX - startX; startX=null; if(Math.abs(dx) < 40) return; if(dx<0) next(); else prev();
+      });
+    })();
+  </script>
 </body>
 </html>
