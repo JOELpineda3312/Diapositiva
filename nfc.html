@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lector NFC Experimental</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        #log { background: #f0f0f0; padding: 10px; border-radius: 5px; min-height: 100px; text-align: left; }
+        button { padding: 15px 25px; font-size: 16px; background: #007bff; color: white; border: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h2>Lector de Etiquetas NFC</h2>
+    <button id="scanBtn">DEBO ESCANEAR</button>
+    
+    <h3>Registro de actividad:</h3>
+    <div id="log">Esperando interacción...</div>
+
+    <script>
+        const scanBtn = document.getElementById('scanBtn');
+        const logDiv = document.getElementById('log');
+
+        function log(msg) {
+            logDiv.innerHTML += `<br>> ${msg}`;
+        }
+
+        scanBtn.addEventListener('click', async () => {
+            if ('NDEFReader' in window) {
+                try {
+                    const ndef = new NDEFReader();
+                    await ndef.scan();
+                    log("✅ Escaneo iniciado. Acerca tu tarjeta...");
+
+                    ndef.onreadingerror = () => {
+                        log("❌ Error de lectura. ¿Es una tarjeta compatible?");
+                    };
+
+                    ndef.onreading = ({ message, serialNumber }) => {
+                        log(`🆔 ID de Serie: ${serialNumber}`);
+                        log(`📖 Registros encontrados: ${message.records.length}`);
+                        
+                        for (const record of message.records) {
+                            log(`- Tipo de dato: ${record.recordType}`);
+                        }
+                    };
+                } catch (error) {
+                    log("⚠️ Error: " + error);
+                }
+            } else {
+                log("🚫 Tu navegador no soporta Web NFC. Usa Chrome en Android.");
+            }
+        });
+    </script>
+</body>
+</html>
