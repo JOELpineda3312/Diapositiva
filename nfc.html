@@ -3,54 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lector NFC Experimental</title>
+    <title>Sistema de Asistencia NFC</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; }
-        #log { background: #f0f0f0; padding: 10px; border-radius: 5px; min-height: 100px; text-align: left; }
-        button { padding: 15px 25px; font-size: 16px; background: #007bff; color: white; border: none; border-radius: 5px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px; }
+        button { background-color: #007bff; color: white; border: none; padding: 12px 24px; font-size: 1rem; border-radius: 8px; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        button:hover { background-color: #0056b3; }
+        #status { margin-top: 20px; padding: 10px; border-radius: 5px; font-weight: bold; }
+        .waiting { color: #666; }
+        .success { color: #28a745; background: #e8f5e9; }
+        .error { color: #dc3545; background: #fdecea; }
     </style>
 </head>
 <body>
-    <h2>Lector de Etiquetas NFC</h2>
-    <button id="scanBtn">DEBO ESCANEAR</button>
-    
-    <h3>Registro de actividad:</h3>
-    <div id="log">Esperando interacción...</div>
 
-    <script>
-        const scanBtn = document.getElementById('scanBtn');
-        const logDiv = document.getElementById('log');
+<div class="container">
+    <h2>Asistencia Escolar</h2>
+    <p>Por favor, escanea tu tarjeta NFC para registrar tu entrada.</p>
+    <button id="btnScan">DEBO REGISTRAR</button>
+    <div id="status" class="waiting">Listo para iniciar...</div>
+    <div id="data"></div>
+</div>
 
-        function log(msg) {
-            logDiv.innerHTML += `<br>> ${msg}`;
+<script type="module">
+    // Importamos lo necesario de Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // TU CONFIGURACIÓN REAL
+    const firebaseConfig = {
+        apiKey: "AIzaSyAqNPFOoONfiIRptuc4SAo0BMelrkRmfdM",
+        authDomain: "nfca-9649c.firebaseapp.com",
+        projectId: "nfca-9649c",
+        storageBucket: "nfca-9649c.firebasestorage.app",
+        messagingSenderId: "459864176222",
+        appId: "1:459864176222:web:579b9d390bd51df9bd26cf",
+        measurementId: "G-K7X38B7Q13"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const btnScan = document.getElementById('btnScan');
+    const statusDiv = document.getElementById('status');
+
+    btnScan.addEventListener('click', async () => {
+        if (!('NDEFReader' in window)) {
+            statusDiv.className = "error";
+            statusDiv.innerText = "❌ NFC no disponible en este navegador.";
+            return;
         }
 
-        scanBtn.addEventListener('click', async () => {
-            if ('NDEFReader' in window) {
-                try {
-                    const ndef = new NDEFReader();
-                    await ndef.scan();
-                    log("✅ Escaneo iniciado. Acerca tu tarjeta...");
+        try {
+            const ndef = new NDEFReader();
+            await ndef.scan();
+            statusDiv.innerText = "🔍 Escaneando... Acerque la tarjeta.";
 
-                    ndef.onreadingerror = () => {
-                        log("❌ Error de lectura. ¿Es una tarjeta compatible?");
-                    };
+            ndef.onreading = async ({ serialNumber }) => {
+                // El ID de tu tarjeta es 69:DE:19:C4
+                const uid = serialNumber; 
+                statusDiv.innerText = `Tarjeta detectada: ${uid}`;
+                await procesarAsistencia(uid);
+            };
 
-                    ndef.onreading = ({ message, serialNumber }) => {
-                        log(`🆔 ID de Serie: ${serialNumber}`);
-                        log(`📖 Registros encontrados: ${message.records.length}`);
-                        
-                        for (const record of message.records) {
-                            log(`- Tipo de dato: ${record.recordType}`);
-                        }
-                    };
-                } catch (error) {
-                    log("⚠️ Error: " + error);
-                }
+        } catch (error) {
+            statusDiv.className = "error";
+            statusDiv.innerText = "Error: " + error.message;
+        }
+    });
+
+    async function procesarAsistencia(uid) {
+        const docRef = doc(db, "estudiantes", uid);
+        
+        try {
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                // Si el estudiante existe, sumamos una asistencia
+                await updateDoc(docRef, {
+                    asistencias: increment(1),
+                    fechaUltima: new Date().toISOString()
+                });
+                statusDiv.className = "success";
+                statusDiv.innerText = `✅ ¡Asistencia registrada para ${docSnap.data().nombre}!`;
             } else {
-                log("🚫 Tu navegador no soporta Web NFC. Usa Chrome en Android.");
+                // Si no existe, podrías crearlo o dar error
+                statusDiv.className = "error";
+                statusDiv.innerText = "❌ Estudiante no encontrado en la base de datos.";
+                console.log("ID de tarjeta no registrado:", uid);
             }
-        });
-    </script>
+        } catch (e) {
+            statusDiv.className = "error";
+            statusDiv.innerText = "Error de base de datos.";
+            console.error(e);
+        }
+    }
+</script>
+
 </body>
 </html>
